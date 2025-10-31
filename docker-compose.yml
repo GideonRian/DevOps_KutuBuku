@@ -10,10 +10,10 @@ services:
     container_name: mysql_db
     restart: unless-stopped
     environment:
-      MYSQL_DATABASE: 'book_db'  # Nama database Anda
+      MYSQL_DATABASE: 'book_db'  # Nama database web "KutuBuku"
       MYSQL_ROOT_PASSWORD: 'your_strong_password' # password database
     ports:
-      # Hubungkan port 3306 di dalam kontainer ke 3307 di komputer Anda
+      # Hubungkan port 3306 di dalam kontainer ke 3307 di komputer kita
       # (Gunakan 3307 agar tidak bentrok dengan XAMPP)
       - "3307:3306"
     volumes:
