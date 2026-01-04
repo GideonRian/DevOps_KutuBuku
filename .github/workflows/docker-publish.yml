@@ -1,0 +1,37 @@
+name: CI/CD Pipeline
+
+# Robot bekerja setiap kali kita push ke branch 'main'
+on:
+  push:
+    branches: [ "main" ]
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+    steps:
+      # 1. Download kode kita ke server GitHub
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      # 2. Login ke Docker Hub (pakai Secrets yang tadi dibuat)
+      - name: Login to Docker Hub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
+      # 3. Build & Push IMAGE BACKEND
+      - name: Build and Push Backend
+        uses: docker/build-push-action@v4
+        with:
+          context: ./server  # <-- Folder backend Anda
+          push: true
+          tags: ${{ secrets.DOCKER_USERNAME }}/proyek-backend:latest
+
+      # 4. Build & Push IMAGE FRONTEND
+      - name: Build and Push Frontend
+        uses: docker/build-push-action@v4
+        with:
+          context: ./client  # <-- Folder frontend Anda
+          push: true
+          tags: ${{ secrets.DOCKER_USERNAME }}/proyek-frontend:latest
