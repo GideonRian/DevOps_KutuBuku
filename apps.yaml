@@ -1,0 +1,93 @@
+# ================= BACKEND =================
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend-deployment
+spec:
+  selector:
+    matchLabels:
+      app: backend
+  template:
+    metadata:
+      labels:
+        app: backend
+    spec:
+      containers:
+      - name: backend
+        # GANTI DENGAN IMAGE ANDA YANG SUDAH DI-PUSH
+        image: gideonriandy/proyek-backend:latest 
+        ports:
+        - containerPort: 8082
+        resources:
+          requests:
+            cpu: "100m"   # Start dengan 0.1 Core CPU
+            memory: "128Mi"
+          limits:
+            cpu: "500m"   # Maksimal 0.5 Core CPU
+            memory: "256Mi"
+        env:
+        - name: DB_HOST
+          value: mysql-service # Mengarah ke Service MySQL
+        - name: DB_USER
+          value: root
+        - name: DB_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: mysql-secret
+              key: password
+        - name: DB_NAME
+          value: book_db
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: backend-service
+spec:
+  type: LoadBalancer
+  ports:
+  - port: 8082
+    targetPort: 8082
+  selector:
+    app: backend
+
+---
+# ================= FRONTEND =================
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: frontend-deployment
+spec:
+  selector:
+    matchLabels:
+      app: frontend
+  template:
+    metadata:
+      labels:
+        app: frontend
+    spec:
+      containers:
+      - name: frontend
+        image: gideonriandy/proyek-frontend:latest # Pastikan nama image sama
+        ports:
+        - containerPort: 80 # <-- UBAH JADI 80
+        resources:
+          requests:
+            cpu: "10m"     # <-- TURUNKAN JADI KECIL (Cuma butuh 0.01 Core!)
+            memory: "32Mi"
+          limits:
+            cpu: "100m"
+            memory: "64Mi"
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: frontend-service
+spec:
+  type: LoadBalancer
+  ports:
+  - port: 3000       # Port browser tetap 3000
+    targetPort: 80   # <-- UBAH JADI 80 (Target ke Nginx)
+  selector:
+    app: frontend

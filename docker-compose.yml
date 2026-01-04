@@ -1,7 +1,3 @@
-# # Versi Docker Compose yang digunakan (yang terkini)
-# version: '3.8'
-
-# Jadi dibawah ini kita mendefinisikan semua kotak agar terorkestrasi (kontainer) 
 services:
   
   # 1. Kontainer untuk database MySQL
@@ -50,10 +46,10 @@ services:
 
   # 4. Kontainer untuk Frontend React
   frontend:
-    build: ./client # Bangun dari Dockerfile di folder client
+    build: ./client
+    image: gideonriandy/proyek-frontend:latest
     container_name: react_ui
-    restart: unless-stopped
     ports:
-      - "3000:3000"
+      - "3000:80"
     depends_on:
       - backend
