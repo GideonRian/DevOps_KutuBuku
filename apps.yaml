@@ -69,6 +69,7 @@ spec:
       containers:
       - name: frontend
         image: gideonriandy/proyek-frontend:latest # Pastikan nama image sama
+        imagePullPolicy: Always
         ports:
         - containerPort: 80 # <-- UBAH JADI 80
         resources:
