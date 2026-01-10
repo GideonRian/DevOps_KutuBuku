@@ -199,7 +199,7 @@ const Home = ({ user }) => {
   return (
     <section className="home-page">
       <div className="hero-container">
-        <h1 className="hero__title">Welcome Majesty, {user?.username || 'Guest'}!</h1>
+        <h1 className="hero__title">Welcome, {user?.username || 'Guest'}!</h1>
         <img src={hero} alt="hero" className="hero__image" />
       </div>
 
